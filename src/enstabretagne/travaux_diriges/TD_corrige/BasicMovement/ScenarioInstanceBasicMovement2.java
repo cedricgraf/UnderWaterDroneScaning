@@ -2,7 +2,6 @@ package enstabretagne.travaux_diriges.TD_corrige.BasicMovement;
 
 import java.util.HashMap;
 
-import enstabretagne.base.math.MoreRandom;
 import enstabretagne.base.time.LogicalDateTime;
 import enstabretagne.base.time.LogicalDuration;
 import enstabretagne.monitor.implementation.MovableState;
@@ -11,10 +10,10 @@ import enstabretagne.simulation.core.IScenario;
 import enstabretagne.simulation.core.IScenarioInstance;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.Scenarios.BasicMvtScenario;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.Scenarios.BasicMvtScenarioFeatures;
-import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Artefact.EntityArtefactFeature;
-import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Artefact.EntityArtefactInit;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Bouee.BoueeFeatures;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Bouee.BoueeInit;
+import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Drone.EntityDroneFeature;
+import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Drone.EntityDroneInit;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.MouvementSequenceur.EntityMouvementSequenceurFeature;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.MouvementSequenceur.EntityMouvementSequenceurInit;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Navire.EntityNavireFeature;
@@ -33,87 +32,51 @@ public class ScenarioInstanceBasicMovement2 implements IScenarioInstance {
 		// Création du navire et des points de passage
 		HashMap<String, Point3D> positionsCles = new HashMap<String, Point3D>();
 		positionsCles.put("start", new Point3D(0, 0, 0));
-		positionsCles.put("PointCible1", new Point3D(10, 10, 0));
-		positionsCles.put("PointCible2", new Point3D(30, -10, 0));
+
+		positionsCles.put("PointCible0", new Point3D(0, 50, 0));
+		positionsCles.put("PointCible1", new Point3D(10, 50, 0));
+		positionsCles.put("PointCible2", new Point3D(10, 0, 0));
 		positionsCles.put("PointCible3", new Point3D(20, 0, 0));
-		positionsCles.put("PointDirection", new Point3D(20, 20, 0));
-		positionsCles.put("PointSousEau", new Point3D(0, 0, -10));
-		positionsCles.put("ObservationMine", new Point3D(20, 20, -20));
+		positionsCles.put("PointCible4", new Point3D(20, 50, 0));
+
+		Point3D A = new Point3D(0, 0, 0);
+		Point3D B = new Point3D(100, 100, 0);
+
+		double amplitude = A.getY() - B.getY();
+		int nbPoints = 3;
+		double L = A.getX() - B.getX();
+		String pointName = "";
+		int x;
+		int y;
+
+		/*
+		 * for (int i = 0; i <= nbPoints; i = i + 2) {
+		 * 
+		 * pointName = "PointCible" + i; x = (int) ((L *i) / nbPoints) ; y = (int)
+		 * (amplitude * (-1 ^ i)) ; positionsCles.put(pointName, new Point3D(x, y, 0));
+		 * 
+		 * 
+		 * pointName = "PointCible" + (i +1); positionsCles.put(pointName, new
+		 * Point3D((L * (i + 1)) / nbPoints,(amplitude * (-1 ^ i)), 0));
+		 * 
+		 * }
+		 */
 
 		MovableState mst;
 		EntityMouvementSequenceurInit msi;
 		EntityMouvementSequenceurFeature feat;
-		int width = 200;
-		int height = 200;
 
-		
-//création du bateau 
-		
-		 mst = new MovableState(new Point3D(0, 0, 0), new Point3D(1, 1, 0), Point3D.ZERO,
-				new Point3D(0, 0, 45.0), new Point3D(10, 5, 0.0), Point3D.ZERO);
-		 msi = new EntityMouvementSequenceurInit("MSI", mst, 10, 100, 2, 8, positionsCles);
-		 feat = new EntityMouvementSequenceurFeature("MSF");
-
-		bsf.getNavires().put(new EntityNavireFeature("NavireF", 5, 3, Color.DARKSLATEGREY, feat),
-				new EntityNavireInit("Navire Observation", msi));
-
-		
-		
-		// création des artefactes on a entre 30 et 40 artefactes suivant une lois
-		// uniforme
-
-		MoreRandom generateur = new MoreRandom();
-		// On définit le germe
-		generateur.setSeed(42);
-		int nombreArtefacts = (int) generateur.nextUniform(30, 40);
-
-		double proportionSphereRouge = 0.6, proportionCylindreJaune = 0.3, proportionCubeVert = 0.1;
-
-		int x, y;
-		for (int i = 0; i < (int) (nombreArtefacts * proportionCubeVert); i++) {
-
-			x = (int) generateur.nextUniform(-width/2, width/2);
-			y = (int) generateur.nextUniform(-height/2, height/2);
-
-			mst = new MovableState(new Point3D(x, y, 0), new Point3D(1, 1, 0), Point3D.ZERO, new Point3D(0, 0, 45.0),
-					new Point3D(10, 5, 0.0), Point3D.ZERO);
-			msi = new EntityMouvementSequenceurInit("Artefact MSI", mst, 10, 100, 2, 8, positionsCles);
-			feat = new EntityMouvementSequenceurFeature("Artefact MSF");
-			bsf.getArtefactes().put(new EntityArtefactFeature("Artefact"+i, 5, 3, Color.RED, feat),
-					new EntityArtefactInit("Artefact Observation 1", msi));
-
-		}
-
-		for (int i = 0; i < (int) (nombreArtefacts * proportionCylindreJaune); i++) {
-
-			x = (int) generateur.nextUniform(-width/2, width/2);
-			y = (int) generateur.nextUniform(-height/2, height/2);
-			mst = new MovableState(new Point3D(x, y, 0), new Point3D(1, 1, 0), Point3D.ZERO, new Point3D(0, 0, 45.0),
-					new Point3D(10, 5, 0.0), Point3D.ZERO);
-			msi = new EntityMouvementSequenceurInit("Artefact MSI", mst, 10, 100, 2, 8, positionsCles);
-			feat = new EntityMouvementSequenceurFeature("Artefact MSF");
-			bsf.getArtefactes().put(new EntityArtefactFeature("Artefact"+i, 5, 3, Color.YELLOW, feat),
-					new EntityArtefactInit("Artefact Observation "+i, msi));
-
-		}
-
-		for (int i = 0; i < (int) (nombreArtefacts * proportionCubeVert); i++) {
-
-			x = (int) generateur.nextUniform(-width/2, width/2);
-			y = (int) generateur.nextUniform(-height/2, height/2);
-			mst = new MovableState(new Point3D(x, y, 0), new Point3D(1, 1, 0), Point3D.ZERO, new Point3D(0, 0, 45.0),
-					new Point3D(10, 5, 0.0), Point3D.ZERO);
-			msi = new EntityMouvementSequenceurInit("Artefact MSI", mst, 10, 100, 2, 8, positionsCles);
-			feat = new EntityMouvementSequenceurFeature("Artefact MSF");
-			bsf.getArtefactes().put(new EntityArtefactFeature("Artefact", 5, 3, Color.GREEN, feat),
-					new EntityArtefactInit("Artefact Observation "+i, msi));
-
-		}
+		// Drone
+		mst = new MovableState(new Point3D(0, 0, 0), new Point3D(0, 0, 0), Point3D.ZERO, new Point3D(-100, 0, 0.0),
+				new Point3D(0, 0, 0.0), Point3D.ZERO);
+		msi = new EntityMouvementSequenceurInit("MSI", mst, 10, 100, 2, 8, positionsCles);
+		feat = new EntityMouvementSequenceurFeature("MSF");
+		bsf.getDrones().put(new EntityDroneFeature("Drone", 5, 3, Color.BLACK, feat),
+				new EntityDroneInit("Drone Observation 1", msi));
 
 		// Création de bouees
-/*
 		int i = 0;
-		int N = 10;
+		int N = 5;
 		positionsCles = new HashMap<String, Point3D>();
 		for (i = 0; i < N; i++) {
 			MovableState mstBouee;
@@ -125,9 +88,7 @@ public class ScenarioInstanceBasicMovement2 implements IScenarioInstance {
 			bsf.getBouees().put(new BoueeFeatures("B1", 5, 1, 3.0), new BoueeInit("B" + i, msiBouee, Color.RED));
 
 		}
-
-*/
-		// Création de l'ocean
+		// Création de l'océan
 		positionsCles = new HashMap<String, Point3D>();
 		MovableState mstOcean = new MovableState(Point3D.ZERO, Point3D.ZERO, Point3D.ZERO, Point3D.ZERO, Point3D.ZERO,
 				Point3D.ZERO);

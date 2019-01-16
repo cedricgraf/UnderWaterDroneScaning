@@ -1,6 +1,7 @@
 package enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Navire;
 
 import enstabretagne.base.logger.Logger;
+
 import enstabretagne.base.logger.ToRecord;
 import enstabretagne.monitor.interfaces.IMovable;
 import enstabretagne.simulation.components.IEntity;
@@ -8,7 +9,7 @@ import enstabretagne.simulation.components.data.SimFeatures;
 import enstabretagne.simulation.components.data.SimInitParameters;
 import enstabretagne.simulation.components.implementation.SimEntity;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.MouvementSequenceur.EntityMouvementSequenceur;
-import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.MouvementSequenceur.EntityMouvementSequenceur_Exemple;
+import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.MouvementSequenceur.EntityMouvementSequenceur_Exemple1;
 import enstabretagne.travaux_diriges.TD_corrige.BasicMovement.SimEntity.Navire.Representation3D.EntityNavire3DRepresentationInterface;
 import javafx.geometry.Point3D;
 import javafx.scene.paint.Color;
@@ -34,7 +35,7 @@ public class EntityNavire extends SimEntity implements IMovable, EntityNavire3DR
 	protected void initializeSimEntity(SimInitParameters init) {
 		NavireInit = (EntityNavireInit) getInitParameters();
 
-		rmv = (EntityMouvementSequenceur_Exemple) createChild(EntityMouvementSequenceur_Exemple.class, "monSequenceur",
+		rmv = (EntityMouvementSequenceur_Exemple1) createChild(EntityMouvementSequenceur_Exemple1.class, "monSequenceur",
 				((EntityNavireFeature) getFeatures()).getSeqFeature());
 		rmv.initialize(NavireInit.getMvtSeqInitial());
 

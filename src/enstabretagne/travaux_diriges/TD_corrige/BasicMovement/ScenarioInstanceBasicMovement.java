@@ -44,8 +44,8 @@ public class ScenarioInstanceBasicMovement implements IScenarioInstance {
 
 		bsf.getNavires().put(new EntityNavireFeature("NavireF", 5, 3, Color.BLACK, feat),
 				new EntityNavireInit("Navire Observation", msi));
-
 		// Création de bouees
+
 		int i = 0;
 		int N = 10;
 		positionsCles = new HashMap<String, Point3D>();
